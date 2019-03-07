@@ -15,9 +15,9 @@ import random
 def now():
     return datetime.datetime.now()
 
-counter = 0
-MIN_PRICE = 25000
-MIN_YEAR = 2012
+
+MIN_PRICE = 1
+MIN_YEAR = 2010
 matches = db.query(Match).all()
 
 matches = [
@@ -25,7 +25,7 @@ matches = [
     if m.tournament.prizemoney > MIN_PRICE and m.tournament.year >= MIN_YEAR
 ]
 
-# because the first matches take
+# because the recent matches take
 # much faster to compute
 np.random.shuffle(matches)
 
@@ -35,6 +35,7 @@ ys = []
 time_last = now()
 time_lefts = []
 
+counter = 0
 last_zero = False
 for match in matches:
     p1 = match.player1
@@ -62,18 +63,19 @@ for match in matches:
 
     counter += 1
 
-    delta_time = now() - time_last
-    left = len(matches) - counter
+    if counter % 100 == 0:
+        delta_time = now() - time_last
+        left = len(matches) - (counter * 100)
 
-    time_left = (left * delta_time).total_seconds()
-    time_last = now()
-    time_lefts.append(time_left)
+        time_left = (left * delta_time).total_seconds()
+        time_last = now()
+        time_lefts.append(time_left)
 
-    avg = int(np.mean(time_lefts))
-    print ">", 100*(counter / float(len(matches))), "%", "ETA:", str(datetime.timedelta(seconds=avg))
+        avg = int(np.mean(time_lefts))
+        print ">", 100*(counter / float(len(matches))), "%", "ETA:", str(datetime.timedelta(seconds=avg))
 
-    #time_lefts = time_lefts[-10:]
-    time_lefts.pop()
+        #time_lefts = time_lefts[-10:]
+        time_lefts.pop()
 
 
 with open('data/Xy.pickle', 'wb') as handle:

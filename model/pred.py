@@ -10,13 +10,13 @@ import numpy as np
 tournament = Tournament()
 tournament.week = 1
 tournament.year = 2019
-tournament.country = "THA"
-start_date = 8
-end_date = 13
-name = "Thailand Masters"
-prizemoney = 150000
-city = "BANGKOK"
-url = "https://bwfworldtour.bwfbadminton.com/tournament/3337/yonex-sunrise-hong-kong-open-2018/results/draw/ms"
+tournament.country = "ENG"
+start_date = 6
+end_date = 10
+name = "ONEX ALL ENGLAND OPEN BADMINTON CHAMPIONSHIPS 2019"
+prizemoney = 1000000
+city = "BIRMINGHAM"
+url = "https://bwfworldtour.bwfbadminton.com/tournament/3376/yonex-all-england-open-badminton-championships-2019/"
 
 clf = joblib.load('data/dnn.pkl') 
 
@@ -44,16 +44,25 @@ def dopred(p1_name, p2_name, round_no):
 
         print p1_name, "\t", p2_name, "\t", p, "\t", clf.predict_proba(match)[0][p], "\t%"
     except Exception as e:
-        pass
-        #raise e
 
-# dopred("LIN Dan","LEE Cheuk Yiu",2)
-# dopred("CHEAM June Wei","Pannawit THONGNUAM",2)
-# dopred("Sitthikom THAMMASIN","Firman Abdul KHOLIK",2)
-dopred("LU Guangzu","Koki WATANABE",2)
-# dopred("Subhankar DEY","Brice LEVERDEZ",2)
-# dopred("LEE Zii Jia","WONG Wing Ki Vincent",2)
-# dopred("Lucas CORVEE","WANG Tzu Wei",2)
-# dopred("Kean Yew LOH","ZHAO Junpeng",2)
+        raise e
+
+dopred("Kento MOMOTA", "Khosit PHETPRADAB",0)
+dopred("Kantaphon WANGCHAROEN", "WANG Tzu Wei",0)
+dopred("KIDAMBI Srikanth", "Brice LEVERDEZ",0)
+dopred("Jonatan CHRISTIE", "LEE Dong Keun",0)
+dopred("CHOU Tien Chen", "HUANG Yuxiang",0)
+dopred("Tommy SUGIARTO", "Rajiv OUSEPH",0)
+dopred("Anthony Sinisuka GINTING", "NG Ka Long Angus",0)
+dopred("SAI PRANEETH B.", "PRANNOY H. S.",0)
+dopred("LU Guangzu", "Hans-Kristian Solberg VITTINGHUS",0)
+dopred("Sameer VERMA", "Viktor AXELSEN",0)
+dopred("Jan O JORGENSEN", "Kazumasa SAKAI",0)
+dopred("Rasmus GEMKE", "CHEN Long",0)
+dopred("LIN Dan", "Kanta TSUNEYAMA",0)
+dopred("Kenta NISHIMOTO", "SON Wan Ho",0)
+dopred("Suppanyu AVIHINGSANON", "LIEW Daren",0)
+dopred("Anders ANTONSEN", "SHI Yuqi",0)
+
 
 

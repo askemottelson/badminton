@@ -11,7 +11,7 @@ from keras.layers import Dense
 from keras.layers import Dropout
 from keras.wrappers.scikit_learn import KerasClassifier
 from keras.constraints import maxnorm
-from keras import regularizers
+from keras import regularizers, optimizers
 from keras.layers.advanced_activations import LeakyReLU
 
 import pickle
@@ -29,22 +29,22 @@ make_keras_picklable()
 
 
 u0 = -1
-TEST = False
+TEST = True
 
 def make_clf():
     clf = GridSearchCV(
         estimator=Pipeline(
             [
-                ("reduce_dim", VarianceThreshold()),
+                # ("reduce_dim", VarianceThreshold()),
                 # ("standardize", StandardScaler()),
                 ("normalize", MinMaxScaler()),
                 ("clf", KerasClassifier(build_fn=make_keras))
             ]
         ),
         param_grid={
-            "reduce_dim__threshold": [0],
-            "clf__batch_size": [5],
-            "clf__epochs": [25]
+            # "reduce_dim__threshold": [0],
+            "clf__batch_size": [10],
+            "clf__epochs": [3]
         },
         scoring="f1_micro"
     )
@@ -54,17 +54,18 @@ def make_clf():
 def make_keras():
     model = Sequential()
 
-    model.add(Dense(units=u0*4, kernel_initializer='he_uniform', activation='relu'))#, kernel_regularizer=regularizers.l2(0.01)))#, kernel_constraint=maxnorm(5)))
-    # model.add(Dropout(0.2))
-    model.add(Dense(units=u0, kernel_initializer='he_uniform', activation='relu'))#, kernel_regularizer=regularizers.l2(0.01)))#, kernel_constraint=maxnorm(3)))
-    
+    model.add(Dense(units=u0, kernel_initializer='he_uniform', activation='relu', kernel_regularizer=regularizers.l2(0.00001)))#, kernel_constraint=maxnorm(5)))
+    #model.add(Dropout(0.1))
+    model.add(Dense(units=u0, kernel_initializer='he_uniform', activation='relu'))#, kernel_regularizer=regularizers.l2(0.001)))#, kernel_constraint=maxnorm(3)))
+    #model.add(Dropout(0.1))
 
-    # output binary
-    # model.add(Dropout(0.4))
+    # output binary 
     model.add(Dense(units=1, kernel_initializer='glorot_uniform', activation='sigmoid'))
 
+    sgd = optimizers.SGD(lr=0.02, decay=1e-5, momentum=0.8, nesterov=True)
+
     model.compile(loss='binary_crossentropy',
-                  optimizer='adam',
+                  optimizer=sgd,
                   metrics=['accuracy'])
 
     return model
