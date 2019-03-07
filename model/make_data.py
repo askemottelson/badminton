@@ -63,19 +63,18 @@ for match in matches:
 
     counter += 1
 
-    if counter % 100 == 0:
-        delta_time = now() - time_last
-        left = len(matches) - (counter * 100)
+    delta_time = now() - time_last
+    left = len(matches) - counter
 
-        time_left = (left * delta_time).total_seconds()
-        time_last = now()
-        time_lefts.append(time_left)
+    time_left = (left * delta_time).total_seconds()
+    time_last = now()
+    time_lefts.append(time_left)
 
-        avg = int(np.mean(time_lefts))
-        print ">", 100*(counter / float(len(matches))), "%", "ETA:", str(datetime.timedelta(seconds=avg))
+    avg = int(np.mean(time_lefts))
+    print ">", 100*(counter / float(len(matches))), "%", "ETA:", str(datetime.timedelta(seconds=avg))
 
-        #time_lefts = time_lefts[-10:]
-        time_lefts.pop()
+    #time_lefts = time_lefts[-10:]
+    time_lefts.pop()
 
 
 with open('data/Xy.pickle', 'wb') as handle:

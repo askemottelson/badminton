@@ -9,3 +9,6 @@ SQLAlchemy-Utils
 SQLAlchemy-Views
 lxml
 bs4
+requests
+certifi
+chardet
